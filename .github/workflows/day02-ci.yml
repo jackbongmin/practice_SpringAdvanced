@@ -1,0 +1,30 @@
+# 4-6: push · PR마다 day02 테스트 + 커버리지 규칙(./gradlew check)을 GitHub 러너에서 돌린다
+name: day02-ci
+
+on:
+  push:
+    branches: [main]
+    paths: ['day02/**']        # day02가 바뀔 때만 돈다
+  pull_request:
+    paths: ['day02/**']
+
+defaults:
+  run:
+    working-directory: day02/backend   # run 명령을 이 폴더에서 실행
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v6 # 의존성 캐시
+      - run: ./gradlew check                  # 테스트 + 4-3 커버리지 규칙
+      - if: failure()                          # 실패했을 때만 테스트 보고서를 남긴다
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-report
+          path: day02/backend/build/reports/tests/test/   # uses 단계는 working-directory가 안 먹어서 루트 기준 경로
