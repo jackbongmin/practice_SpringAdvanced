@@ -1,4 +1,4 @@
-package com.kyobo.product;
+package com.kyobo.product.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

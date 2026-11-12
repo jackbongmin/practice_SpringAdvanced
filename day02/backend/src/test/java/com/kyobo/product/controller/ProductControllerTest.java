@@ -1,4 +1,4 @@
-package com.kyobo.product;
+package com.kyobo.product.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -14,8 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.kyobo.product.ProductDtos.ProductRequest;
-import com.kyobo.product.ProductDtos.ProductResponse;
+import com.kyobo.product.dto.ProductDtos.ProductRequest;
+import com.kyobo.product.dto.ProductDtos.ProductResponse;
+import com.kyobo.product.exception.ProductNotFoundException;
+import com.kyobo.product.service.ProductService;
 
 /**
  * 1일차 (10_01) · 가져옴

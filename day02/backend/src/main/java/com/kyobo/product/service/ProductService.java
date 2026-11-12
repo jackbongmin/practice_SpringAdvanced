@@ -1,10 +1,13 @@
-package com.kyobo.product;
+package com.kyobo.product.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kyobo.product.ProductDtos.ProductRequest;
-import com.kyobo.product.ProductDtos.ProductResponse;
+import com.kyobo.product.dto.ProductDtos.ProductRequest;
+import com.kyobo.product.dto.ProductDtos.ProductResponse;
+import com.kyobo.product.entity.Product;
+import com.kyobo.product.exception.ProductNotFoundException;
+import com.kyobo.product.repository.ProductRepository;
 
 /**
  * 1일차 (10_01) · 가져옴 → 2일차 · 02에서 raisePrice 추가

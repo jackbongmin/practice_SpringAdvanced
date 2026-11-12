@@ -93,25 +93,43 @@
 ### 2-1. 1일차에서 가져온 파일
 이 저장소는 2일차부터 시작함. 그래서 **1일차(10_01) 완성 코드**(원본의 `10_02/backend-start`)를 `day02/backend`로 가져와 둠.
 
-| 파일 | 상태 | 오늘 할 일 |
+| 파일 (패키지) | 상태 | 오늘 할 일 |
 |---|---|---|
-| `ProductApplication` · `ProductDtos` · `ProductNotFoundException` · `ProductRepository` | 1일차 코드 그대로 (역할 주석만 더함) | **안 고침** |
-| `Product` | 1일차 코드 그대로 | `changePrice()` 추가 (4-4 ⑤) |
-| `ProductService` | 1일차 코드 그대로 | 4-2에서 한 줄 잠깐 주석 처리 / 생성자 · `raisePrice()` 추가 (4-4 ⑤) |
-| `ProductController` | 1일차 코드 그대로 | `raisePrice()` 추가 (4-4 ⑤) |
-| `ProductServiceTest` | 1일차 테스트 4개 | 테스트 3개 추가 + `setUp()` 변경 (4-2 · 4-3 · 4-4 ⑤) |
-| `ProductControllerTest` · `ProductRepositoryTest` | 1일차 테스트 각 3개 | **안 고침** |
-| `PricePolicy` | **빈 클래스** (import · 역할 주석만) | **새로 씀**: 4-4 |
-| `PricePolicyTest` | **빈 클래스** (import · 역할 주석만) | **새로 씀**: 4-4 (코드보다 먼저) |
+| `ProductApplication` (`com.kyobo.product`) · `ProductDtos` (`dto`) · `ProductNotFoundException` (`exception`) · `ProductRepository` (`repository`) | 1일차 코드 그대로 (역할 주석만 더함) | **안 고침** |
+| `Product` (`entity`) | 1일차 코드 그대로 | `changePrice()` 추가 (4-4 ⑤) |
+| `ProductService` (`service`) | 1일차 코드 그대로 | 4-2에서 한 줄 잠깐 주석 처리 / 생성자 · `raisePrice()` 추가 (4-4 ⑤) |
+| `ProductController` (`controller`) | 1일차 코드 그대로 | `raisePrice()` 추가 (4-4 ⑤) |
+| `ProductServiceTest` (`service`) | 1일차 테스트 4개 | 테스트 3개 추가 + `setUp()` 변경 (4-2 · 4-3 · 4-4 ⑤) |
+| `ProductControllerTest` (`controller`) · `ProductRepositoryTest` (`repository`) | 1일차 테스트 각 3개 | **안 고침** |
+| `PricePolicy` (`service`) | **빈 클래스** (import · 역할 주석만) | **새로 씀**: 4-4 |
+| `PricePolicyTest` (`service`) | **빈 클래스** (import · 역할 주석만) | **새로 씀**: 4-4 (코드보다 먼저) |
 
 - 가져온 클래스는 코드는 그대로 두고 맨 위의 한 줄 `//` 주석만 **역할 주석**으로 바꿈
 - `PricePolicy`는 빈 클래스로 있어서, 4-4 ①의 첫 빨강은 "클래스가 없음"이 아니라 **"`raisePrice` 메서드가 없음"**으로 나옴
 
-### 2-2. 설정 파일
+### 2-2. 계층별 패키지
+원본은 클래스가 전부 `com.kyobo.product` 한 폴더에 있음. 이 저장소에서는 **하는 일(계층)별로 패키지를 나눠** 둠.
+
+| 패키지 (`com.kyobo.product.` 아래) | 들어 있는 것 | 하는 일 |
+|---|---|---|
+| (맨 위) | `ProductApplication` | 시작점. 이 패키지와 **그 아래 패키지 전부**를 빈 · 엔티티로 찾음 |
+| `controller` | `ProductController` | 주소 · 요청을 받아 서비스에 넘김 |
+| `service` | `ProductService` · `PricePolicy` | 실제 기능과 계산 규칙 |
+| `repository` | `ProductRepository` | DB 읽고 쓰기 |
+| `entity` | `Product` | 테이블 한 줄 (JPA 엔티티) |
+| `dto` | `ProductDtos` | 요청 · 응답 모양 |
+| `exception` | `ProductNotFoundException` | 없는 상품 → 404 |
+
+- 테스트도 **같은 패키지**에 둠 (`ProductServiceTest`는 `src/test/.../service/`). 그래서 `ProductServiceTest`는 `PricePolicy`를 import 없이 씀
+- 패키지가 다르면 import가 필요함. 필요한 import는 빈 파일과 가져온 파일에 **미리 넣어 둠** (4장 코드에 import가 없으면 이미 있는 것)
+- 패키지가 다른 곳에서 부르는 메서드는 `public`이어야 함 → `ProductResponse.from()`을 `public`으로 바꿔 둠 (원본은 `static`만)
+- `ProductApplication`을 `controller` 같은 하위 패키지로 옮기면 다른 패키지의 빈을 못 찾음. 맨 위에 둠
+
+### 2-3. 설정 파일
 - `build.gradle` · `application.properties`: **안 바꿈.** JaCoCo를 붙이는 것 자체가 오늘 실습이라 4-1 · 4-3에서 직접 고침
 - `settings.gradle`: 프로젝트 이름 `product-coverage` (원본 그대로)
 
-### 2-3. IntelliJ
+### 2-4. IntelliJ
 - `day02/backend/build.gradle`을 Gradle 프로젝트로 연결함 → [README "IntelliJ에서 Gradle 프로젝트 연결하기"](README.md#intellij에서-gradle-프로젝트-연결하기)
 - 4-1에서 `build.gradle`을 고친 뒤에는 Gradle 탭 **Reload**
 
@@ -138,7 +156,7 @@ $env:JAVA_HOME = "$env:USERPROFILE\.jdks\ms-21.0.12"
 | 테스트 결과 | `build\reports\tests\test\index.html` | 어떤 테스트가 통과 · 실패했나, 실패 메시지 |
 | 커버리지 | `build\reports\jacoco\test\html\index.html` | 어떤 줄을 실행했나 (4-1부터 생김) |
 - 탐색기에서 더블클릭하거나 PowerShell에서 `start build\reports\jacoco\test\html\index.html`
-- 커버리지 보고서 읽는 순서: `com.kyobo.product` → `ProductService` → 위쪽 `ProductService.java` 링크를 누르면 **줄마다 색**이 보임
+- 커버리지 보고서 읽는 순서: `com.kyobo.product.service` → `ProductService` → 위쪽 `ProductService.java` 링크를 누르면 **줄마다 색**이 보임
 - 테스트를 다시 돌린 뒤에는 브라우저에서 `F5`
 
 ### 3-3. 서버 켜고 curl (4-4 ⑤에서만)
@@ -170,15 +188,19 @@ day02/backend/
 ├── build.gradle                                  (4-1, 4-3, 4-4 ⑤에서 고침)
 └── src/
     ├── main/java/com/kyobo/product/
-    │   ├── ProductApplication · ProductDtos · ProductNotFoundException · ProductRepository  (그대로)
-    │   ├── Product.java              (4-4 ⑤ changePrice 추가)
-    │   ├── ProductService.java       (4-2 한 줄 주석 처리했다 되돌림 / 4-4 ⑤ raisePrice 추가)
-    │   ├── ProductController.java    (4-4 ⑤ PUT /product/price 추가)
-    │   └── PricePolicy.java          (빈 클래스 → 4-4에서 씀)
+    │   ├── ProductApplication.java                 (그대로)
+    │   ├── controller/ProductController.java       (4-4 ⑤ PUT /product/price 추가)
+    │   ├── service/ProductService.java             (4-2 한 줄 주석 처리했다 되돌림 / 4-4 ⑤ raisePrice 추가)
+    │   ├── service/PricePolicy.java                (빈 클래스 → 4-4에서 씀)
+    │   ├── repository/ProductRepository.java       (그대로)
+    │   ├── entity/Product.java                     (4-4 ⑤ changePrice 추가)
+    │   ├── dto/ProductDtos.java                    (그대로)
+    │   └── exception/ProductNotFoundException.java (그대로)
     └── test/java/com/kyobo/product/
-        ├── ProductControllerTest · ProductRepositoryTest   (그대로)
-        ├── ProductServiceTest.java   (4-2, 4-3, 4-4 ⑤에서 테스트 추가)
-        └── PricePolicyTest.java      (빈 클래스 → 4-4에서 "먼저" 씀)
+        ├── controller/ProductControllerTest.java   (그대로)
+        ├── repository/ProductRepositoryTest.java   (그대로)
+        ├── service/ProductServiceTest.java         (4-2, 4-3, 4-4 ⑤에서 테스트 추가)
+        └── service/PricePolicyTest.java            (빈 클래스 → 4-4에서 "먼저" 씀)
 ```
 
 | 단계 | 할 일 | 보게 될 것 |
@@ -258,7 +280,7 @@ IntelliJ Gradle 탭 **Reload** → `.\gradlew.bat test` → 커버리지 보고�
 
 #### 확인
 - `build\reports\jacoco\test\html\index.html`이 생김
-- `com.kyobo.product` → `ProductService` → `ProductService.java`:
+- `com.kyobo.product.service` → `ProductService` → `ProductService.java`:
 
 | 메서드 | 색 |
 |---|---|
@@ -355,7 +377,7 @@ jacocoTestCoverageVerification {
 	violationRules {
 		rule {
 			element = 'CLASS'                                  // 클래스마다 따로 잼
-			includes = ['com.kyobo.product.ProductService']    // 이 클래스만 검사
+			includes = ['com.kyobo.product.service.ProductService'] // 이 클래스만 검사 (패키지까지 적음)
 			limit {
 				counter = 'LINE'                               // 줄 기준
 				minimum = 0.90                                 // 90% 미만이면 실패
@@ -373,7 +395,7 @@ tasks.named('check') {
 #### 확인 ①
 ```
 > Task :jacocoTestCoverageVerification FAILED
-Rule violated for class com.kyobo.product.ProductService: lines covered ratio is 0.83, but expected minimum is 0.90
+Rule violated for class com.kyobo.product.service.ProductService: lines covered ratio is 0.83, but expected minimum is 0.90
 BUILD FAILED
 ```
 - 4-2의 이름 변경 테스트가 있는 상태라 `0.83`. 4-0 상태(그 테스트 없음)였다면 `0.58` (Claude Code 실측)
@@ -585,7 +607,7 @@ BUILD FAILED
 ```
 **`build.gradle`** — 4-3 규칙의 `includes`에 `PricePolicy`를 더함
 ```groovy
-			includes = ['com.kyobo.product.ProductService', 'com.kyobo.product.PricePolicy'] // 4-4: 가격 정책도 90% 이상
+			includes = ['com.kyobo.product.service.ProductService', 'com.kyobo.product.service.PricePolicy'] // 4-4: 가격 정책도 90% 이상
 ```
 - `PricePolicy`를 4-3에서 미리 넣지 않은 이유: 그때는 빈 클래스라 `PricePolicy: lines covered ratio is 0.00`으로 같이 실패함 (Claude Code 실측)
 
@@ -669,7 +691,7 @@ public class ProductServiceAiTest {
 |---|---|---|
 | JUnit 버전 | JUnit 4 (`org.junit.Test`, `@RunWith`) | JUnit 5 (`org.junit.jupiter`, Mockito는 `@ExtendWith(MockitoExtension.class)`) |
 | 서비스 클래스 이름 | `ProductServiceImpl` (교재) | `ProductService` |
-| 응답 타입 | `ProductResponseDto` (교재) | `ProductDtos.ProductResponse` |
+| 응답 타입 | `ProductResponseDto` (교재) | `dto.ProductDtos.ProductResponse` |
 | `Product` 생성 | `new Product(1L, ...)` — 없는 생성자 | `saved(1L, "펜", 1650, 10)` 도우미 |
 | `PricePolicy`를 mock으로 둔 결과 | 대답을 정하지 않아 `raisePrice`가 **0**을 돌려줌 → 가격 0원 | 진짜 `new PricePolicy()`를 넣음 (순수 계산) |
 | 단언 | `assertNotNull` — 0원이어도 통과 | `price()`가 `1898`인지 비교 |
@@ -752,18 +774,20 @@ PricePolicyTest > 천원을_10퍼센트_올리면_1100원() FAILED
 | 증상 | 원인 → 해결 |
 |---|---|
 | `JAVA_HOME is not set` / `java`를 못 찾음 | 터미널을 새로 열면 `$env:JAVA_HOME`이 사라짐. 3-1의 `$env:JAVA_HOME = ...` 줄을 다시 침 |
-| `import org.junit...` · `org.springframework...`에 빨간 줄 | IntelliJ가 `day02/backend`를 Gradle 프로젝트로 모름 → 2-3. 터미널 `gradlew`는 정상 |
+| `import org.junit...` · `org.springframework...`에 빨간 줄 | IntelliJ가 `day02/backend`를 Gradle 프로젝트로 모름 → 2-4. 터미널 `gradlew`는 정상 |
 | `build\reports\jacoco`가 없음 | `finalizedBy 'jacocoTestReport'` 빠짐. `.\gradlew.bat jacocoTestReport`로 직접 만들어도 됨 |
 | 보고서를 열었는데 색이 없음 | `build\reports\tests\`를 염 (테스트 결과 보고서). 커버리지는 `build\reports\jacoco\` |
 | 보고서가 그대로 | 브라우저 `F5` 안 누름 |
 | 4-3 규칙을 넣었는데 `check`가 그냥 통과 | `tasks.named('check') { dependsOn ... }` 빠짐. 또는 `test`로 돌림 (`test`는 규칙을 안 봄) |
 | 4-3 `PricePolicy: lines covered ratio is 0.00` | `includes`에 `PricePolicy`를 미리 넣음. 4-4 ⑤에서 넣음 |
 | 4-2 뒤로 `changeName` 관련 테스트가 계속 실패 | `// product.changeName(name);` 주석을 안 풀었음 (4-2 할 일 ④) |
-| 4-4 ① 에러가 `cannot find symbol ... class PricePolicy` | `PricePolicy.java`를 지웠거나 패키지가 다름. 빈 클래스는 `com.kyobo.product`에 있어야 함 |
+| 4-4 ① 에러가 `cannot find symbol ... class PricePolicy` | `PricePolicy.java`를 지웠거나 패키지가 다름. 빈 클래스와 테스트 둘 다 `com.kyobo.product.service`에 있어야 함 |
+| `cannot find symbol: class Product` (또는 `ProductRepository` 등) | 다른 패키지 클래스의 import를 지움. 2-2 표의 패키지대로 `import com.kyobo.product.entity.Product;`처럼 넣음 |
+| `from(Product) is not public in ProductResponse; cannot be accessed from outside package` | `ProductDtos`의 `from` 앞 `public`을 지움 (2-2) |
 | `@ParameterizedTest` · `@CsvSource`에 빨간 줄 | 빈 파일에 있던 import를 지움. `org.junit.jupiter.params.ParameterizedTest` · `org.junit.jupiter.params.provider.CsvSource` |
 | 4-4 ④ 뒤에도 `[3] 1650` 실패 | `RoundingMode.HALF_UP` 대신 `HALF_EVEN`/`DOWN`을 씀, 또는 아직 `double` 계산이 남음 |
 | 4-4 ⑤ `constructor ProductService ... cannot be applied` | `ProductServiceTest.setUp()`에 `new PricePolicy()`를 안 넣음 |
-| 4-4 ⑤ 서버 시작 시 `required a bean of type 'com.kyobo.product.PricePolicy'` | `PricePolicy`에 `@Component` 빠짐 |
+| 4-4 ⑤ 서버 시작 시 `required a bean of type 'com.kyobo.product.service.PricePolicy'` | `PricePolicy`에 `@Component` 빠짐 |
 | curl `POST /product`가 `400` | JSON 따옴표를 `\"`로 안 씀, 또는 한글 이름을 보냄 (3-3) |
 | curl `PUT /product/price`가 `404` (번호 1) | 서버를 재시작해서 상품이 사라짐 → `POST`부터. 또는 컨트롤러 `@PutMapping("/price")` 빠짐 |
 | `Port 8080 was already in use` | 이전 서버가 켜져 있음. 그 터미널에서 `Ctrl + C` |

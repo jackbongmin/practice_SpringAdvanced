@@ -1,4 +1,4 @@
-package com.kyobo.product;
+package com.kyobo.product.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kyobo.product.ProductDtos.ChangeNameRequest;
-import com.kyobo.product.ProductDtos.ProductRequest;
-import com.kyobo.product.ProductDtos.ProductResponse;
+import com.kyobo.product.dto.ProductDtos.ChangeNameRequest;
+import com.kyobo.product.dto.ProductDtos.ProductRequest;
+import com.kyobo.product.dto.ProductDtos.ProductResponse;
+import com.kyobo.product.service.ProductService;
 
 /**
  * 1일차 (10_01) · 가져옴 → 2일차 · 02에서 PUT /product/price 추가

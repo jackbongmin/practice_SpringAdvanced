@@ -1,4 +1,4 @@
-package com.kyobo.product;
+package com.kyobo.product.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.kyobo.product;
+package com.kyobo.product.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

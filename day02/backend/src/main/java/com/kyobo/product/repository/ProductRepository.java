@@ -1,8 +1,10 @@
-package com.kyobo.product;
+package com.kyobo.product.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.kyobo.product.entity.Product;
 
 /**
  * 1일차 (10_01) · 가져옴
