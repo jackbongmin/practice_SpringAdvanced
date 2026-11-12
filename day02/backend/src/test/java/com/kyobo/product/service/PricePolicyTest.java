@@ -23,4 +23,37 @@ import org.junit.jupiter.params.provider.CsvSource;
  */
 class PricePolicyTest {
 
+	PricePolicy policy = new PricePolicy(); // 계산만 하는 클래스라 스프링 없이 new로 만듦
+
+	@Test
+	void 천원을_10퍼센트_올리면_1100원() {
+		assertThat(policy.raisePrice(1000, 10)).isEqualTo(1100);
+	}
+
+	@Test
+	void 인상률_0이면_그대로() {
+		assertThat(policy.raisePrice(1234, 0)).isEqualTo(1234);
+	}
+
+	@ParameterizedTest // 값만 다른 테스트를 여러 번 돌림
+	@CsvSource({       // 줄 하나 = 실행 한 번. 순서대로 price, percent, expected에 들어감
+			"1234, 10, 1357", // 1357.4 → 내림
+			"1005, 10, 1106", // 1105.5 → 올림
+			"1650, 15, 1898"  // 1897.5 → 올림 (double로 계산하면 1897이 나와 실패했던 값)
+	})
+	void 원_단위_반올림(int price, int percent, int expected) {
+		assertThat(policy.raisePrice(price, percent)).isEqualTo(expected);
+	}
+
+	@Test
+	void 음수_인상률은_거절() {
+		assertThatThrownBy(() -> policy.raisePrice(1000, -10)) // 람다 안의 코드가 예외를 던져야 통과
+				.isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	void 음수_가격은_거절() {
+		assertThatThrownBy(() -> policy.raisePrice(-1000, 10))
+				.isInstanceOf(IllegalArgumentException.class);
+	}
 }

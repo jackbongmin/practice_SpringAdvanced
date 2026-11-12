@@ -49,4 +49,9 @@ public class Product {
 	public void changeName(String name) {
 		this.name = name;
 	}
+
+	// 4-4: 가격 변경. @Transactional 안에서 부르면 save 없이도 UPDATE가 나감 (변경 감지)
+	public void changePrice(int price) {
+		this.price = price;
+	}
 }

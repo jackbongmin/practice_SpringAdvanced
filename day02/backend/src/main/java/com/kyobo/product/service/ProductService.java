@@ -24,10 +24,12 @@ import com.kyobo.product.repository.ProductRepository;
 public class ProductService {
 
 	private final ProductRepository products;
+	private final PricePolicy pricePolicy; // 4-4: 가격 계산은 PricePolicy에 맡긴다
 
-	// 생성자로 받는다 → 테스트에서 가짜(mock) 저장소를 넣을 수 있다
-	public ProductService(ProductRepository products) {
+	// 생성자로 받는다 → 테스트에서 가짜 저장소 · 진짜 PricePolicy를 넣을 수 있다
+	public ProductService(ProductRepository products, PricePolicy pricePolicy) {
 		this.products = products;
+		this.pricePolicy = pricePolicy;
 	}
 
 	public ProductResponse getProduct(Long number) {
@@ -44,6 +46,14 @@ public class ProductService {
 	public ProductResponse changeName(Long number, String name) {
 		Product product = find(number);
 		product.changeName(name);
+		return ProductResponse.from(product);
+	}
+
+	// 4-4: 상품을 찾아 PricePolicy가 계산한 가격으로 바꾼다
+	@Transactional
+	public ProductResponse raisePrice(Long number, int percent) {
+		Product product = find(number); // 없는 번호면 ProductNotFoundException → 404
+		product.changePrice(pricePolicy.raisePrice(product.getPrice(), percent));
 		return ProductResponse.from(product);
 	}
 

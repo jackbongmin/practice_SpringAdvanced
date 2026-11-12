@@ -55,4 +55,10 @@ public class ProductController {
 		service.deleteProduct(number);
 		return "정상적으로 삭제되었습니다.";
 	}
+
+	// 4-4: PUT /product/price?number=1&percent=10
+	@PutMapping("/price")
+	public ProductResponse raisePrice(@RequestParam Long number, @RequestParam int percent) { // 주소의 ?number=...&percent=... 값을 받음
+		return service.raisePrice(number, percent);
+	}
 }
