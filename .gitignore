@@ -22,3 +22,14 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# 그레이들 래퍼 jar는 올림 (위의 *.jar 규칙 예외)
+!**/gradle/wrapper/gradle-wrapper.jar
+
+# 빌드 결과 · IDE · 도구
+**/build/
+**/.gradle/
+.idea/
+.vscode/
+out/
+.omc/
