@@ -1,0 +1,59 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.13'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco' // 4-1: 커버리지 측정 플러그인. 테스트가 실행한 줄을 기록함
+}
+
+group = 'com.kyobo.product'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'com.h2database:h2'
+	// JUnit 5 · Mockito · AssertJ · MockMvc가 모두 들어 있다
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	testLogging { events 'passed', 'failed' } // 테스트 이름과 결과를 콘솔에 보인다
+	finalizedBy 'jacocoTestReport'            // 4-1: 테스트가 끝나면 보고서를 만든다. 빠뜨리면 build/reports/jacoco가 안 생김
+}
+
+jacoco {
+	toolVersion = '0.8.12' // JaCoCo 버전
+}
+
+// 4-1: build/reports/jacoco/test/html/index.html
+jacocoTestReport {
+	dependsOn test // 보고서는 테스트 결과(실행 기록)가 있어야 만들 수 있음
+}
+
+// 4-3: 서비스 · 가격 정책은 줄 커버리지 90% 미만이면 빌드 실패
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			element = 'CLASS'  // 클래스마다 따로 잼
+			includes = ['com.kyobo.product.service.ProductService', 'com.kyobo.product.service.PricePolicy'] // 4-4: 가격 정책도 90% 이상
+			limit {
+				counter = 'LINE' // 줄 기준
+				minimum = 0.90   // 90% 미만이면 실패
+			}
+		}
+	}
+}
+
+tasks.named('check') {
+	dependsOn jacocoTestCoverageVerification // check를 돌리면 규칙도 검사함. 빠뜨리면 규칙이 있어도 아무 일 없음
+}
