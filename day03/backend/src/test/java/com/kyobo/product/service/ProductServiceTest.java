@@ -8,11 +8,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.kyobo.product.dto.ProductDtos.ProductRequest;
@@ -118,5 +123,19 @@ class ProductServiceTest {
 		given(products.findById(1L)).willReturn(Optional.of(saved(1L, "펜", 1650, 10)));
 
 		assertThat(service.raisePrice(1L, 15).price()).isEqualTo(1898);
+	}
+
+	// 3일차 4-6: 검색 결과(엔티티 Page)가 응답 DTO Page로 바뀌고, 페이지 정보는 그대로인가
+	//   검색 API 테스트의 서비스는 가짜라 search 줄을 실행하지 않음 → 이 테스트가 search 줄 커버리지를 채움
+	@Test
+	void 검색은_엔티티_페이지를_응답_페이지로_바꾼다() {
+		Pageable pageable = PageRequest.of(1, 2);
+		given(products.findByNameContaining("펜", pageable))
+				.willReturn(new PageImpl<>(List.of(saved(5L, "형광펜", 1200, 12)), pageable, 5)); // 전체 5개 중 1페이지
+
+		Page<ProductResponse> page = service.search("펜", pageable);
+
+		assertThat(page.getContent()).containsExactly(new ProductResponse(5L, "형광펜", 1200, 12)); // 내용이 DTO로 바뀜
+		assertThat(page.getTotalElements()).isEqualTo(5);                                         // 페이지 정보는 그대로
 	}
 }

@@ -45,6 +45,13 @@ public class ProductController {
 		return service.getProduct(number);
 	}
 
+	// 4-5: GET /product/search?keyword=펜&page=1&size=2&sort=price,desc
+	@GetMapping("/search")
+	public Page<ProductResponse> search(@RequestParam String keyword, // keyword는 필수. 아예 빼면 400, keyword=(빈 값)는 전체 검색
+			@PageableDefault(size = 5, sort = "number") Pageable pageable) { // 주소의 page · size · sort를 스프링이 Pageable로 묶어 줌. 안 오면 0페이지 · 5개 · 번호순
+		return service.search(keyword, pageable);
+	}
+
 	@PostMapping
 	public ProductResponse create(@RequestBody ProductRequest req) {
 		return service.saveProduct(req);

@@ -17,6 +17,7 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
  * - 가이드 03 4-5 ②: Page를 JSON으로 그대로 내보내면 경고가 찍힘 → @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO) 한 줄을 더함
  */
 @SpringBootApplication
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO) // 4-5 ②: Page를 {content, page} 모양으로 내보냄. 빠뜨리면 PageImpl을 그대로 내보내며 "Serializing PageImpl instances as-is" 경고
 public class ProductApplication {
 
 	public static void main(String[] args) {

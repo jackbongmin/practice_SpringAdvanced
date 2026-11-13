@@ -45,4 +45,6 @@ class ProductRepositoryTest {
 	void 각_테스트는_빈_DB에서_시작한다() {
 		assertThat(products.count()).isZero();
 	}
+
+
 }

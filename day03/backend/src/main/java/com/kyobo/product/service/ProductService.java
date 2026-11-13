@@ -37,6 +37,11 @@ public class ProductService {
 		return ProductResponse.from(find(number));
 	}
 
+	// 4-5: 이름 검색 + 페이지. 엔티티 Page를 응답 DTO Page로 바꿔 내보낸다 (엔티티를 그대로 밖에 내보내지 않음)
+	public Page<ProductResponse> search(String keyword, Pageable pageable) {
+		return products.findByNameContaining(keyword, pageable).map(ProductResponse::from); // Page.map: 내용만 바꾸고 페이지 정보(전체 개수 등)는 그대로
+	}
+
 	@Transactional
 	public ProductResponse saveProduct(ProductRequest req) {
 		Product saved = products.save(new Product(req.name(), req.price(), req.stock()));

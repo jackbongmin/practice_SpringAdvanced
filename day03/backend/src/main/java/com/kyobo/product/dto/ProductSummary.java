@@ -12,4 +12,7 @@ package com.kyobo.product.dto;
  */
 public interface ProductSummary {
 
+	String getName(); // Product.name 칸만 읽어 옴 (getter 이름 = 필드 이름)
+
+	Integer getPrice(); // Product.price 칸만 읽어 옴
 }
