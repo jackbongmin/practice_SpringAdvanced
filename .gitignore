@@ -33,3 +33,7 @@ replay_pid*
 .vscode/
 out/
 .omc/
+
+# 프런트엔드 (엑스트라): 설치 폴더 · 빌드 결과는 안 올림 (package-lock.json은 올림)
+node_modules/
+dist/

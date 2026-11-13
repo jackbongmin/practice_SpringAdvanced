@@ -6,7 +6,8 @@
 3. 다 쳤으면 "가이드 NN 다 했어"라고 알림 → Claude Code가 코드 리뷰와 실행 확인
 4. 확인이 끝나면 기능 단위로 커밋함 (push는 직접)
 
-- 실습 원본: `C:\Users\user\Desktop\실습\practice-20261112T040046Z-1-001\practice\10_0N` (N일차 = `10_0N`). 원본의 `backend-final` · 튜토리얼은 저장소에 넣지 않음
+- 실습 원본: `C:\Users\user\Desktop\실습\practice-20261112T040046Z-1-001\practice\10_0N` (N일차 = `10_0N`). 3일차부터는 엑스트라 참고 답안(`frontend-final`)까지 들어 있는 `C:\Users\user\Desktop\실습\10_0N`을 봄. 원본의 `backend-final` · `frontend-final` · 튜토리얼은 저장소에 넣지 않음
+- 엑스트라는 하지 않아도 본 실습이 끝남. 3일차 엑스트라는 화면을 **코딩 에이전트에게 시키는** 연습이라 `dayNN/frontend`를 미리 만들어 두지 않음
 - 빈 파일에는 `package` 줄, import, 클래스 역할 주석, 비어 있는 선언만 있음. 클래스 안을 가이드 코드로 채움
 - **일차는 순서대로 이어짐.** 다음 일차는 전날 완성 코드에서 시작함. 이 저장소는 2일차부터 시작해서 `day02`는 원본의 1일차 완성 코드(`10_02/backend-start`)를 가져와 둠. `day03`부터는 전날 `dayNN/backend`의 내 완성 코드를 복사해 시작함
 
